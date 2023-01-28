@@ -6,6 +6,8 @@ import com.felipegabriel.ecommerceapi.model.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class ProductService {
@@ -19,5 +21,9 @@ public class ProductService {
                 .build();
 
         return productRepository.save(product);
+    }
+
+    public List<Product> findByName(String name) {
+        return productRepository.findByName(name);
     }
 }

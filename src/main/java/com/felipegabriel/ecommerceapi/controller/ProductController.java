@@ -11,6 +11,8 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/product")
 @RequiredArgsConstructor
@@ -25,6 +27,12 @@ public class ProductController {
     public ResponseEntity<Product> create(@RequestBody ProductDTO productDTO) {
         Product product = productService.create(productDTO);
         return new ResponseEntity<>(product, HttpStatus.CREATED);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Product>> findByName(@RequestParam("name") String name) {
+        List<Product> product = productService.findByName(name);
+        return new ResponseEntity<>(product, HttpStatus.OK);
     }
 
 }
