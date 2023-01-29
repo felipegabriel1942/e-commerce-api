@@ -4,6 +4,7 @@ import com.felipegabriel.ecommerceapi.dto.ProductDTO;
 import com.felipegabriel.ecommerceapi.model.entity.Product;
 import com.felipegabriel.ecommerceapi.service.ProductService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -29,10 +30,19 @@ public class ProductController {
         return new ResponseEntity<>(product, HttpStatus.CREATED);
     }
 
-    @GetMapping
-    public ResponseEntity<List<Product>> findByName(@RequestParam("name") String name) {
+    @GetMapping("name/{name}")
+    public ResponseEntity<List<Product>> findByName(@PathVariable("name") String name) {
         List<Product> product = productService.findByName(name);
         return new ResponseEntity<>(product, HttpStatus.OK);
+    }
+
+    @GetMapping
+    public ResponseEntity<Page<Product>> findProducts(
+            @RequestParam("page") Integer page,
+            @RequestParam("size") Integer size
+    ) {
+        Page<Product> products = productService.findProducts(page, size);
+        return new ResponseEntity<>(products, HttpStatus.OK);
     }
 
 }

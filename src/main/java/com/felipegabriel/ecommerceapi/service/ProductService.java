@@ -4,6 +4,8 @@ import com.felipegabriel.ecommerceapi.dto.ProductDTO;
 import com.felipegabriel.ecommerceapi.model.entity.Product;
 import com.felipegabriel.ecommerceapi.model.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,5 +27,9 @@ public class ProductService {
 
     public List<Product> findByName(String name) {
         return productRepository.findByName(name);
+    }
+
+    public Page<Product> findProducts(Integer page, Integer size) {
+        return productRepository.findAll(PageRequest.of(page, size));
     }
 }
