@@ -1,4 +1,4 @@
-package com.felipegabriel.ecommerceapi.config;
+package com.felipegabriel.ecommerceapi.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

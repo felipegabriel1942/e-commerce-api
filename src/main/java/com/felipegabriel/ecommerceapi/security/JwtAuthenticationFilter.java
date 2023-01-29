@@ -1,4 +1,4 @@
-package com.felipegabriel.ecommerceapi.config;
+package com.felipegabriel.ecommerceapi.security;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

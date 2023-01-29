@@ -1,6 +1,5 @@
-package com.felipegabriel.ecommerceapi.service;
+package com.felipegabriel.ecommerceapi.security;
 
-import com.felipegabriel.ecommerceapi.config.JwtService;
 import com.felipegabriel.ecommerceapi.dto.UserDTO;
 import com.felipegabriel.ecommerceapi.enums.Role;
 import com.felipegabriel.ecommerceapi.model.entity.User;

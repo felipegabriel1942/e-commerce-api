@@ -1,4 +1,4 @@
-package com.felipegabriel.ecommerceapi.config;
+package com.felipegabriel.ecommerceapi.security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
