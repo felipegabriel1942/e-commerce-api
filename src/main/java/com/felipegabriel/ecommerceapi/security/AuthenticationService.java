@@ -1,6 +1,8 @@
 package com.felipegabriel.ecommerceapi.security;
 
+import com.felipegabriel.ecommerceapi.dto.UserAuthenticationDTO;
 import com.felipegabriel.ecommerceapi.dto.UserDTO;
+import com.felipegabriel.ecommerceapi.dto.UserRegistrationDTO;
 import com.felipegabriel.ecommerceapi.enums.Role;
 import com.felipegabriel.ecommerceapi.model.entity.User;
 import com.felipegabriel.ecommerceapi.model.repository.UserRepository;
@@ -22,25 +24,25 @@ public class AuthenticationService {
 
     private final AuthenticationManager authenticationManager;
 
-    public void register(UserDTO userDTO) {
+    public void register(UserRegistrationDTO userRegistrationDTO) {
         User user = User.builder()
-                .email(userDTO.getEmail())
-                .password(passwordEncoder.encode(userDTO.getPassword()))
+                .email(userRegistrationDTO.getEmail())
+                .password(passwordEncoder.encode(userRegistrationDTO.getPassword()))
                 .role(Role.USER)
                 .build();
 
         userRepository.save(user);
     }
 
-    public String authenticate(UserDTO userDTO) {
+    public String authenticate(UserAuthenticationDTO userAuthenticationDTO) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        userDTO.getEmail(),
-                        userDTO.getPassword()
+                        userAuthenticationDTO.getEmail(),
+                        userAuthenticationDTO.getPassword()
                 )
         );
 
-        User user = userRepository.findByEmail(userDTO.getEmail())
+        User user = userRepository.findByEmail(userAuthenticationDTO.getEmail())
                 .orElseThrow();
 
         return jwtService.generateToken(user);

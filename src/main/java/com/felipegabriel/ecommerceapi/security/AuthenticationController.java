@@ -1,6 +1,8 @@
 package com.felipegabriel.ecommerceapi.security;
 
+import com.felipegabriel.ecommerceapi.dto.UserAuthenticationDTO;
 import com.felipegabriel.ecommerceapi.dto.UserDTO;
+import com.felipegabriel.ecommerceapi.dto.UserRegistrationDTO;
 import com.felipegabriel.ecommerceapi.security.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,14 +19,14 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
     @PostMapping("/register")
-    public ResponseEntity<Void> register(@RequestBody UserDTO userDTO) {
-        authenticationService.register(userDTO);
+    public ResponseEntity<Void> register(@RequestBody UserRegistrationDTO userRegistrationDTO) {
+        authenticationService.register(userRegistrationDTO);
         return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<String> authenticate(@RequestBody UserDTO userDTO) {
-        return ResponseEntity.ok(authenticationService.authenticate(userDTO));
+    public ResponseEntity<String> authenticate(@RequestBody UserAuthenticationDTO userAuthenticationDTO) {
+        return ResponseEntity.ok(authenticationService.authenticate(userAuthenticationDTO));
     }
 
 

@@ -3,6 +3,7 @@ package com.felipegabriel.ecommerceapi.model.entity;
 import com.felipegabriel.ecommerceapi.enums.SaleStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -14,6 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "sale")
+@Builder
 public class Sale {
 
     @Id
@@ -26,8 +28,7 @@ public class Sale {
     @ManyToOne
     private User user;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "product_id")
+    @ManyToMany(targetEntity = Product.class)
     private List<Product> products;
 
     @Enumerated(EnumType.STRING)
