@@ -3,6 +3,7 @@ package com.felipegabriel.ecommerceapi.service;
 import com.felipegabriel.ecommerceapi.dto.ProductDTO;
 import com.felipegabriel.ecommerceapi.dto.SaleDTO;
 import com.felipegabriel.ecommerceapi.enums.SaleStatus;
+import com.felipegabriel.ecommerceapi.exception.SaleNotFoundException;
 import com.felipegabriel.ecommerceapi.model.entity.Product;
 import com.felipegabriel.ecommerceapi.model.entity.Sale;
 import com.felipegabriel.ecommerceapi.model.entity.User;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -50,5 +52,16 @@ public class SaleService {
                 .price(productDTO.getPrice())
                 .name(productDTO.getName())
                 .build();
+    }
+
+    public Sale cancel(Long id) {
+        Optional<Sale> sale = saleRepository.findById(id);
+
+        if (sale.isEmpty()) {
+            throw new SaleNotFoundException();
+        }
+
+        sale.get().setStatus(SaleStatus.CANCELED);
+        return saleRepository.save(sale.get());
     }
 }
