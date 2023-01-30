@@ -3,6 +3,8 @@ package com.felipegabriel.ecommerceapi.service;
 import static org.assertj.core.api.Assertions.*;
 import static com.felipegabriel.ecommerceapi.commom.ProductConstants.*;
 
+import com.felipegabriel.ecommerceapi.dto.ProductDTO;
+import com.felipegabriel.ecommerceapi.mapper.ProductMapper;
 import com.felipegabriel.ecommerceapi.model.entity.Product;
 import com.felipegabriel.ecommerceapi.model.repository.ProductRepository;
 
@@ -29,10 +31,17 @@ public class ProductServiceTest {
     @Mock
     private ProductRepository productRepository;
 
+    @Mock
+    private ProductMapper productMapper;
+
     @Test
     public void createProduct_WithValidData_ReturnsEmpty() {
         Mockito
                 .when(productRepository.save(PRODUCT))
+                .thenReturn(PRODUCT);
+
+        Mockito
+                .when(productMapper.toEntity(PRODUCT_DTO))
                 .thenReturn(PRODUCT);
 
         Product sut = productService.create(PRODUCT_DTO);
@@ -46,11 +55,15 @@ public class ProductServiceTest {
                 .when(productRepository.findByName(Mockito.anyString()))
                 .thenReturn(Arrays.asList(PRODUCT));
 
-        List<Product> sut = productService.findByName(Mockito.anyString());
+        Mockito
+                .when(productMapper.toDto(PRODUCT))
+                .thenReturn(PRODUCT_DTO);
+
+        List<ProductDTO> sut = productService.findByName(Mockito.anyString());
 
         assertThat(sut).isNotEmpty();
         assertThat(sut.size()).isEqualTo(1);
-        assertThat(sut.get(0)).isEqualTo(PRODUCT);
+        assertThat(sut.get(0)).isEqualTo(PRODUCT_DTO);
     }
 
     @Test
@@ -59,10 +72,14 @@ public class ProductServiceTest {
                 .when(productRepository.findAll(PageRequest.of(0, 10)))
                 .thenReturn(new PageImpl<>(Arrays.asList(PRODUCT)));
 
-        Page<Product> sut = productService.findProducts(0, 10);
+        Mockito
+                .when(productMapper.toDto(PRODUCT))
+                .thenReturn(PRODUCT_DTO);
+
+        Page<ProductDTO> sut = productService.findProducts(0, 10);
 
         assertThat(sut.get()).isNotEmpty();
         assertThat(sut.get().collect(Collectors.toList()).size()).isEqualTo(1);
-        assertThat(sut.get().collect(Collectors.toList()).get(0)).isEqualTo(PRODUCT);
+        assertThat(sut.get().collect(Collectors.toList()).get(0)).isEqualTo(PRODUCT_DTO);
     }
 }

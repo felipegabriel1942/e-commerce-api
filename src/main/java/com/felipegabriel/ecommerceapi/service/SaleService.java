@@ -4,6 +4,7 @@ import com.felipegabriel.ecommerceapi.dto.ProductDTO;
 import com.felipegabriel.ecommerceapi.dto.SaleDTO;
 import com.felipegabriel.ecommerceapi.enums.SaleStatus;
 import com.felipegabriel.ecommerceapi.exception.SaleNotFoundException;
+import com.felipegabriel.ecommerceapi.mapper.SaleMapper;
 import com.felipegabriel.ecommerceapi.model.entity.Product;
 import com.felipegabriel.ecommerceapi.model.entity.Sale;
 import com.felipegabriel.ecommerceapi.model.entity.User;
@@ -22,39 +23,13 @@ public class SaleService {
 
     private final SaleRepository saleRepository;
 
-    public Sale create(SaleDTO saleDTO) {
-        var sale = Sale.builder()
-                .date(LocalDate.now())
-                .user(
-                        User.builder()
-                                .id(saleDTO.getUser().getId())
-                                .email(saleDTO.getUser().getEmail())
-                                .role(saleDTO.getUser().getRole())
-                                .build()
-                )
-                .products(mapToProductEntityList(saleDTO.getProducts()))
-                .status(SaleStatus.ACTIVE)
-                .build();
+    private final SaleMapper saleMapper;
 
-        return saleRepository.save(sale);
+    public SaleDTO create(SaleDTO saleDTO) {
+        return saleMapper.toDto(saleRepository.save(saleMapper.toEntity(saleDTO)));
     }
 
-    // TODO: Implementar mapper
-    private List<Product> mapToProductEntityList(List<ProductDTO> productDTOList) {
-        return productDTOList.stream()
-                .map(this::mapToProductEntity)
-                .collect(Collectors.toList());
-    }
-
-    private Product mapToProductEntity(ProductDTO productDTO) {
-        return Product.builder()
-                .id(productDTO.getId())
-                .price(productDTO.getPrice())
-                .name(productDTO.getName())
-                .build();
-    }
-
-    public Sale cancel(Long id) {
+    public SaleDTO cancel(Long id) {
         Optional<Sale> sale = saleRepository.findById(id);
 
         if (sale.isEmpty()) {
@@ -62,6 +37,6 @@ public class SaleService {
         }
 
         sale.get().setStatus(SaleStatus.CANCELED);
-        return saleRepository.save(sale.get());
+        return saleMapper.toDto(saleRepository.save(sale.get()));
     }
 }

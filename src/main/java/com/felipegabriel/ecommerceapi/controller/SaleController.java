@@ -18,8 +18,8 @@ public class SaleController {
 
     @PostMapping
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<Sale> create(@RequestBody SaleDTO saleDTO) {
-        Sale sale = saleService.create(saleDTO);
+    public ResponseEntity<SaleDTO> create(@RequestBody SaleDTO saleDTO) {
+        SaleDTO sale = saleService.create(saleDTO);
         return new ResponseEntity<>(sale, HttpStatus.CREATED);
     }
 

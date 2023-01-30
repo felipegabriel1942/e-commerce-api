@@ -2,6 +2,7 @@ package com.felipegabriel.ecommerceapi.model.entity;
 
 import com.felipegabriel.ecommerceapi.enums.SaleStatus;
 import jakarta.persistence.*;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,6 +23,7 @@ public class Sale {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "date", insertable = false, updatable = false)
     private LocalDate date;
 
     @JoinColumn(name = "_user")
@@ -32,5 +34,16 @@ public class Sale {
     private List<Product> products;
 
     @Enumerated(EnumType.STRING)
-    private SaleStatus status;
+    private SaleStatus status = SaleStatus.ACTIVE;
+
+    @PrePersist
+    void prePersist() {
+        if (this.status == null) {
+            this.status = SaleStatus.ACTIVE;
+        }
+
+        if (this.date == null) {
+            this.date = LocalDate.now();
+        }
+    }
 }

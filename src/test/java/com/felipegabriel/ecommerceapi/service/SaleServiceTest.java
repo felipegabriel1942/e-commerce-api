@@ -4,9 +4,10 @@ import static com.felipegabriel.ecommerceapi.commom.SaleConstants.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import com.felipegabriel.ecommerceapi.dto.SaleDTO;
 import com.felipegabriel.ecommerceapi.enums.SaleStatus;
 import com.felipegabriel.ecommerceapi.exception.SaleNotFoundException;
-import com.felipegabriel.ecommerceapi.model.entity.Sale;
+import com.felipegabriel.ecommerceapi.mapper.SaleMapper;
 import com.felipegabriel.ecommerceapi.model.repository.SaleRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,13 +27,17 @@ public class SaleServiceTest {
     @Mock
     private SaleRepository saleRepository;
 
+    @Mock
+    private SaleMapper saleMapper;
+
     @Test
     public void createSale_WithValidData_ReturnsSale() {
         when(saleRepository.save(any())).thenReturn(SALE);
+        when(saleMapper.toDto(SALE)).thenReturn(SALE_DTO);
 
-        Sale sut = saleService.create(SALE_DTO);
+        SaleDTO sut = saleService.create(SALE_DTO);
 
-        assertThat(sut).isEqualTo(SALE);
+        assertThat(sut).isEqualTo(SALE_DTO);
     }
 
     @Test
@@ -40,7 +45,10 @@ public class SaleServiceTest {
         when(saleRepository.findById(anyLong())).thenReturn(Optional.of(SALE));
         when(saleRepository.save(any())).thenReturn(SALE);
 
-        Sale sut = saleService.cancel(anyLong());
+        SALE_DTO.setStatus(SaleStatus.CANCELED);
+        when(saleMapper.toDto(SALE)).thenReturn(SALE_DTO);
+
+        SaleDTO sut = saleService.cancel(anyLong());
 
         assertThat(sut.getStatus()).isEqualTo(SaleStatus.CANCELED);
     }
