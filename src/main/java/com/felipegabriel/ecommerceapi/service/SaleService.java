@@ -1,21 +1,19 @@
 package com.felipegabriel.ecommerceapi.service;
 
-import com.felipegabriel.ecommerceapi.dto.ProductDTO;
 import com.felipegabriel.ecommerceapi.dto.SaleDTO;
 import com.felipegabriel.ecommerceapi.enums.SaleStatus;
 import com.felipegabriel.ecommerceapi.exception.SaleNotFoundException;
 import com.felipegabriel.ecommerceapi.mapper.SaleMapper;
-import com.felipegabriel.ecommerceapi.model.entity.Product;
 import com.felipegabriel.ecommerceapi.model.entity.Sale;
 import com.felipegabriel.ecommerceapi.model.entity.User;
 import com.felipegabriel.ecommerceapi.model.repository.SaleRepository;
+import com.felipegabriel.ecommerceapi.model.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -25,8 +23,15 @@ public class SaleService {
 
     private final SaleMapper saleMapper;
 
-    public SaleDTO create(SaleDTO saleDTO) {
-        return saleMapper.toDto(saleRepository.save(saleMapper.toEntity(saleDTO)));
+    private final UserRepository userRepository;
+
+    public SaleDTO create(SaleDTO saleDTO, String userEmail) {
+        User user = userRepository.findByEmail(userEmail).orElseThrow();
+
+        Sale sale = saleMapper.toEntity(saleDTO);
+        sale.setUser(user);
+
+        return saleMapper.toDto(saleRepository.save(sale));
     }
 
     public SaleDTO cancel(Long id) {
@@ -38,5 +43,11 @@ public class SaleService {
 
         sale.get().setStatus(SaleStatus.CANCELED);
         return saleMapper.toDto(saleRepository.save(sale.get()));
+    }
+
+    public Page<SaleDTO> findSalesByUser(String email, Integer page, Integer size) {
+        return saleRepository
+                .findSalesByUser(email, PageRequest.of(page, size))
+                .map(saleMapper::toDto);
     }
 }

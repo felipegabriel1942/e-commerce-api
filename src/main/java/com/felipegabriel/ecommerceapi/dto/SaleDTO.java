@@ -19,8 +19,6 @@ public class SaleDTO {
 
     private LocalDate date;
 
-    private UserDTO user;
-
     private List<ProductDTO> products;
 
     private SaleStatus status;

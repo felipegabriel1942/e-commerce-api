@@ -21,7 +21,6 @@ public class SaleConstants {
     public static final SaleDTO SALE_DTO = SaleDTO.builder()
             .date(LocalDate.now())
             .status(SaleStatus.ACTIVE)
-            .user(UserConstants.USER_DTO)
             .products(Arrays.asList(PRODUCT_DTO))
             .build();
 }
