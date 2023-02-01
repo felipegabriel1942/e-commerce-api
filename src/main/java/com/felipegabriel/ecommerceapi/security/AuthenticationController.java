@@ -1,9 +1,7 @@
 package com.felipegabriel.ecommerceapi.security;
 
 import com.felipegabriel.ecommerceapi.dto.UserAuthenticationDTO;
-import com.felipegabriel.ecommerceapi.dto.UserDTO;
 import com.felipegabriel.ecommerceapi.dto.UserRegistrationDTO;
-import com.felipegabriel.ecommerceapi.security.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

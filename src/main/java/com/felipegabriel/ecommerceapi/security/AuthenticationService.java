@@ -1,7 +1,6 @@
 package com.felipegabriel.ecommerceapi.security;
 
 import com.felipegabriel.ecommerceapi.dto.UserAuthenticationDTO;
-import com.felipegabriel.ecommerceapi.dto.UserDTO;
 import com.felipegabriel.ecommerceapi.dto.UserRegistrationDTO;
 import com.felipegabriel.ecommerceapi.enums.Role;
 import com.felipegabriel.ecommerceapi.model.entity.User;
