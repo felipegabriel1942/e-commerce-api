@@ -23,7 +23,7 @@ public class Sale {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "date", insertable = false, updatable = false)
+    @Column(name = "date", updatable = false)
     private LocalDate date;
 
     @JoinColumn(name = "_user")

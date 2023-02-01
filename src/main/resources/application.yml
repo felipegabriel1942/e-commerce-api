@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/e_commerce_db
-    username: postgres
-    password: felipe1942
+    url: jdbc:postgresql://host.docker.internal:5432/e_commerce_db
+    username: root
+    password: root
     driver-class-name: org.postgresql.Driver
   jpa:
     show-sql: true
