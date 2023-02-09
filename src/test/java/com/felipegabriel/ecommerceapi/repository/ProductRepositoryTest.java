@@ -1,21 +1,20 @@
 package com.felipegabriel.ecommerceapi.repository;
 
 import static org.assertj.core.api.Assertions.*;
+import static com.felipegabriel.ecommerceapi.commom.ProductConstants.*;
 
-import com.felipegabriel.ecommerceapi.commom.ProductConstants;
 import com.felipegabriel.ecommerceapi.model.entity.Product;
 import com.felipegabriel.ecommerceapi.model.repository.ProductRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.test.annotation.DirtiesContext;
 
 import java.math.BigDecimal;
 import java.util.List;
 
 @DataJpaTest
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class ProductRepositoryTest {
 
     @Autowired
@@ -24,9 +23,14 @@ public class ProductRepositoryTest {
     @Autowired
     private TestEntityManager testEntityManager;
 
+    @BeforeEach
+    public void beforeEach() {
+        PRODUCT.setId(null);
+    }
+
     @Test
     public void createProduct_WithValidData_ReturnsProduct() {
-        Product product = productRepository.save(ProductConstants.PRODUCT);
+        Product product = productRepository.save(PRODUCT);
 
         Product sut = testEntityManager.find(Product.class, product.getId());
 
@@ -44,12 +48,12 @@ public class ProductRepositoryTest {
 
     @Test
     public void findProduct_ByName_ReturnsProductsList() {
-        productRepository.save(ProductConstants.PRODUCT);
+        Product savedProduct = testEntityManager.persistFlushFind(PRODUCT);
 
-        List<Product> sut = productRepository.findByName(ProductConstants.PRODUCT.getName());
+        List<Product> sut = productRepository.findByName(PRODUCT.getName());
 
         assertThat(sut.isEmpty()).isFalse();
         assertThat(sut.size()).isEqualTo(1);
-        assertThat(sut.get(0)).isEqualTo(ProductConstants.PRODUCT);
+        assertThat(sut.get(0)).isEqualTo(savedProduct);
     }
 }

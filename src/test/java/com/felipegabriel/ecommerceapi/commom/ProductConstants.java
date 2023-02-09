@@ -8,13 +8,11 @@ import java.math.BigDecimal;
 public class ProductConstants {
 
     public static final Product PRODUCT = Product.builder()
-            .id(1L)
             .name("PLAYSTATION 5")
             .price(BigDecimal.valueOf(5000))
             .build();
 
     public static final ProductDTO PRODUCT_DTO = ProductDTO.builder()
-            .id(1L)
             .name("PLAYSTATION 5")
             .price(BigDecimal.valueOf(5000))
             .build();
