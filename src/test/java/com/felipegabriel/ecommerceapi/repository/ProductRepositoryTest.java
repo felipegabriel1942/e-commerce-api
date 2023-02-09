@@ -43,7 +43,7 @@ public class ProductRepositoryTest {
     }
 
     @Test
-    public void findProduct_ByName_ReturnsProducts() {
+    public void findProduct_ByName_ReturnsProductsList() {
         productRepository.save(ProductConstants.PRODUCT);
 
         List<Product> sut = productRepository.findByName(ProductConstants.PRODUCT.getName());

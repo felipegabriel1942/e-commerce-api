@@ -3,10 +3,15 @@ package com.felipegabriel.ecommerceapi.model.entity;
 import com.felipegabriel.ecommerceapi.enums.SaleStatus;
 import jakarta.persistence.*;
 
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Length;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -28,6 +33,7 @@ public class Sale {
 
     @JoinColumn(name = "_user")
     @ManyToOne
+    @NotNull
     private User user;
 
     @ManyToMany(targetEntity = Product.class)

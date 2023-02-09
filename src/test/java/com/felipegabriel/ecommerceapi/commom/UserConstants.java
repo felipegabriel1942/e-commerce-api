@@ -5,6 +5,13 @@ import com.felipegabriel.ecommerceapi.model.entity.User;
 
 public class UserConstants {
 
-    public static final User USER = User.builder().email("user@mail.com").role(Role.USER).build();
-    public static final User USER_ADMIN = User.builder().email("admin@mail.com").role(Role.ADMIN).build();
+    public static final User USER = User.builder()
+            .email("user@mail.com")
+            .role(Role.USER)
+            .build();
+
+    public static final User USER_ADMIN = User.builder()
+            .email("admin@mail.com")
+            .role(Role.ADMIN)
+            .build();
 }
