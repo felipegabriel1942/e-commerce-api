@@ -3,6 +3,7 @@ package com.felipegabriel.ecommerceapi.controller;
 import com.felipegabriel.ecommerceapi.dto.ProductDTO;
 import com.felipegabriel.ecommerceapi.model.entity.Product;
 import com.felipegabriel.ecommerceapi.service.ProductService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -13,6 +14,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/v1/product")
@@ -25,7 +27,7 @@ public class ProductController {
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Product> create(@RequestBody ProductDTO productDTO) {
+    public ResponseEntity<Product> create(@RequestBody @Valid ProductDTO productDTO) {
         Product product = productService.create(productDTO);
         return new ResponseEntity<>(product, HttpStatus.CREATED);
     }
@@ -33,7 +35,7 @@ public class ProductController {
     @GetMapping("name/{name}")
     public ResponseEntity<List<ProductDTO>> findByName(@PathVariable("name") String name) {
         List<ProductDTO> product = productService.findByName(name);
-        return new ResponseEntity<>(product, HttpStatus.OK);
+        return new ResponseEntity<>(product, product.isEmpty() ? HttpStatus.NOT_FOUND : HttpStatus.OK);
     }
 
     @GetMapping
@@ -42,7 +44,6 @@ public class ProductController {
             @RequestParam("size") Integer size
     ) {
         Page<ProductDTO> products = productService.findProducts(page, size);
-        return new ResponseEntity<>(products, HttpStatus.OK);
+        return new ResponseEntity<>(products, Objects.isNull(products) ? HttpStatus.NOT_FOUND : HttpStatus.OK);
     }
-
 }
