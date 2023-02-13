@@ -1,4 +1,4 @@
-package com.felipegabriel.ecommerceapi.hanlder;
+package com.felipegabriel.ecommerceapi.handler;
 
 import com.felipegabriel.ecommerceapi.exception.SaleNotFoundException;
 import org.springframework.http.HttpHeaders;
