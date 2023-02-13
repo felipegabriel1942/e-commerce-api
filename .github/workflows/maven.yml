@@ -35,7 +35,7 @@ jobs:
         image: felipegabriel1942/e-commerce-api
         tags: latest
         registry: docker.io
-        dockerfile: Dockerfile
+        compose-file: docker-compose.yml
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
 
