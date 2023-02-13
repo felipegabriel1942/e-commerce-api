@@ -25,9 +25,7 @@ public class SaleService {
 
     private final UserRepository userRepository;
 
-    public SaleDTO create(SaleDTO saleDTO, String userEmail) {
-        User user = userRepository.findByEmail(userEmail).orElseThrow();
-
+    public SaleDTO create(SaleDTO saleDTO, User user) {
         Sale sale = saleMapper.toEntity(saleDTO);
         sale.setUser(user);
 

@@ -1,6 +1,8 @@
 package com.felipegabriel.ecommerceapi.dto;
 
 import com.felipegabriel.ecommerceapi.enums.SaleStatus;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,6 +21,7 @@ public class SaleDTO {
 
     private LocalDate date;
 
+    @NotNull(message = "Venda deve ter pelo menos um produto.")
     private List<ProductDTO> products;
 
     private SaleStatus status;

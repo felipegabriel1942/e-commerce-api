@@ -1,16 +1,15 @@
 package com.felipegabriel.ecommerceapi.service;
 
 import static com.felipegabriel.ecommerceapi.commom.SaleConstants.*;
+import static com.felipegabriel.ecommerceapi.commom.UserConstants.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-import com.felipegabriel.ecommerceapi.commom.UserConstants;
 import com.felipegabriel.ecommerceapi.dto.SaleDTO;
 import com.felipegabriel.ecommerceapi.enums.SaleStatus;
 import com.felipegabriel.ecommerceapi.exception.SaleNotFoundException;
 import com.felipegabriel.ecommerceapi.mapper.SaleMapper;
 import com.felipegabriel.ecommerceapi.model.repository.SaleRepository;
-import com.felipegabriel.ecommerceapi.model.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -36,17 +35,14 @@ public class SaleServiceTest {
     @Mock
     private SaleMapper saleMapper;
 
-    @Mock
-    private UserRepository userRepository;
 
     @Test
     public void createSale_WithValidData_ReturnsSale() {
         when(saleRepository.save(any())).thenReturn(SALE);
         when(saleMapper.toDto(SALE)).thenReturn(SALE_DTO);
         when(saleMapper.toEntity(SALE_DTO)).thenReturn(SALE);
-        when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(UserConstants.USER));
 
-        SaleDTO sut = saleService.create(SALE_DTO, anyString());
+        SaleDTO sut = saleService.create(SALE_DTO, USER);
 
         assertThat(sut).isEqualTo(SALE_DTO);
     }

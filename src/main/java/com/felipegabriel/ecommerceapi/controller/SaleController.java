@@ -1,13 +1,15 @@
 package com.felipegabriel.ecommerceapi.controller;
 
 import com.felipegabriel.ecommerceapi.dto.SaleDTO;
+import com.felipegabriel.ecommerceapi.model.entity.User;
 import com.felipegabriel.ecommerceapi.service.SaleService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -19,9 +21,11 @@ public class SaleController {
 
     @PostMapping
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<SaleDTO> create(@RequestBody SaleDTO saleDTO) {
-        String userEmail = SecurityContextHolder.getContext().getAuthentication().getName();
-        SaleDTO sale = saleService.create(saleDTO, userEmail);
+    public ResponseEntity<SaleDTO> create(
+            @RequestBody @Valid SaleDTO saleDTO,
+            @AuthenticationPrincipal User user
+    ) {
+        SaleDTO sale = saleService.create(saleDTO, user);
         return new ResponseEntity<>(sale, HttpStatus.CREATED);
     }
 
@@ -36,10 +40,10 @@ public class SaleController {
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<Page<SaleDTO>> findSales(
             @RequestParam("page") Integer page,
-            @RequestParam("size") Integer size
+            @RequestParam("size") Integer size,
+            @AuthenticationPrincipal User user
     ) {
-        String userEmail = SecurityContextHolder.getContext().getAuthentication().getName();
-        Page<SaleDTO> sales =  saleService.findSalesByUser(userEmail, page, size);
-        return new ResponseEntity<>(sales, HttpStatus.OK);
+        Page<SaleDTO> sales =  saleService.findSalesByUser(user.getEmail(), page, size);
+        return new ResponseEntity<>(sales, sales.isEmpty() ? HttpStatus.NOT_FOUND : HttpStatus.OK);
     }
 }

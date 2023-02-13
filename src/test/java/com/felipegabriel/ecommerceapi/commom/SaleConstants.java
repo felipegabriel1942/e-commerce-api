@@ -2,9 +2,13 @@ package com.felipegabriel.ecommerceapi.commom;
 
 import static com.felipegabriel.ecommerceapi.commom.ProductConstants.*;
 
+import com.felipegabriel.ecommerceapi.dto.ProductDTO;
 import com.felipegabriel.ecommerceapi.dto.SaleDTO;
 import com.felipegabriel.ecommerceapi.enums.SaleStatus;
 import com.felipegabriel.ecommerceapi.model.entity.Sale;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -23,4 +27,10 @@ public class SaleConstants {
             .status(SaleStatus.ACTIVE)
             .products(Arrays.asList(PRODUCT_DTO))
             .build();
+
+    public static final Page<SaleDTO> PAGE_SALE_DTO = new PageImpl<>(
+            Arrays.asList(SALE_DTO),
+            PageRequest.of(0, 10),
+            1
+    );
 }
