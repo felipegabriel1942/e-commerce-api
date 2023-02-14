@@ -1,6 +1,7 @@
 package com.felipegabriel.ecommerceapi.service;
 
 import com.felipegabriel.ecommerceapi.dto.ProductDTO;
+import com.felipegabriel.ecommerceapi.exception.ProductNotFoundException;
 import com.felipegabriel.ecommerceapi.mapper.ProductMapper;
 import com.felipegabriel.ecommerceapi.model.entity.Product;
 import com.felipegabriel.ecommerceapi.model.repository.ProductRepository;
@@ -25,12 +26,26 @@ public class ProductService {
     }
 
     public List<ProductDTO> findByName(String name) {
-        return productRepository.findByName(name).stream()
+        List<ProductDTO> products = productRepository.findByName(name).stream()
                 .map(productMapper::toDto)
                 .collect(Collectors.toList());
+
+        if (products.isEmpty()) {
+            throw new ProductNotFoundException();
+        }
+
+        return products;
     }
 
     public Page<ProductDTO> findProducts(Integer page, Integer size) {
-        return productRepository.findAll(PageRequest.of(page, size)).map(productMapper::toDto);
+        Page<ProductDTO> products = productRepository
+                .findAll(PageRequest.of(page, size))
+                .map(productMapper::toDto);
+
+        if (products.isEmpty()) {
+            throw new ProductNotFoundException();
+        }
+
+        return products;
     }
 }

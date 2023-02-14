@@ -35,7 +35,7 @@ public class ProductController {
     @GetMapping("name/{name}")
     public ResponseEntity<List<ProductDTO>> findByName(@PathVariable("name") String name) {
         List<ProductDTO> product = productService.findByName(name);
-        return new ResponseEntity<>(product, product.isEmpty() ? HttpStatus.NOT_FOUND : HttpStatus.OK);
+        return new ResponseEntity<>(product, HttpStatus.OK);
     }
 
     @GetMapping
@@ -44,6 +44,6 @@ public class ProductController {
             @RequestParam("size") Integer size
     ) {
         Page<ProductDTO> products = productService.findProducts(page, size);
-        return new ResponseEntity<>(products, Objects.isNull(products) ? HttpStatus.NOT_FOUND : HttpStatus.OK);
+        return new ResponseEntity<>(products, HttpStatus.OK);
     }
 }

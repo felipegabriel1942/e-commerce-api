@@ -23,7 +23,13 @@ public class ProductConstants {
 
     public static final Page<ProductDTO> PAGE_PRODUCT_DTO = new PageImpl<>(
             Arrays.asList(PRODUCT_DTO),
-            PageRequest.of(0, 10),
+            PageRequest.of(0, 1),
+            1
+    );
+
+    public static final Page<Product> PAGE_PRODUCT = new PageImpl<>(
+            Arrays.asList(PRODUCT),
+            PageRequest.of(0, 1),
             1
     );
 

@@ -1,10 +1,13 @@
 package com.felipegabriel.ecommerceapi.controller;
 
 import static com.felipegabriel.ecommerceapi.commom.ProductConstants.*;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.felipegabriel.ecommerceapi.exception.ProductNotFoundException;
+import com.felipegabriel.ecommerceapi.exception.SaleNotFoundException;
 import com.felipegabriel.ecommerceapi.model.entity.Product;
 import com.felipegabriel.ecommerceapi.security.JwtAuthenticationFilter;
 import com.felipegabriel.ecommerceapi.service.ProductService;
@@ -41,7 +44,7 @@ public class ProductControllerTest {
     @Test
     @WithMockUser(username = "admin", password = "admin", roles = {"ADMIN"})
     public void createProduct_WithValidData_ReturnsProduct() throws Exception {
-        Mockito.when(productService.create(PRODUCT_DTO)).thenReturn(PRODUCT);
+        when(productService.create(PRODUCT_DTO)).thenReturn(PRODUCT);
 
         mockMvc.perform(post(BASE_URL)
                     .content(objectMapper.writeValueAsString(PRODUCT_DTO))
@@ -69,9 +72,7 @@ public class ProductControllerTest {
 
     @Test
     public void listProducts_ByExistingName_ReturnsFilteredProducts() throws Exception {
-        Mockito
-                .when(productService.findByName(PRODUCT_DTO.getName()))
-                .thenReturn(Arrays.asList(PRODUCT_DTO));
+         when(productService.findByName(PRODUCT_DTO.getName())).thenReturn(Arrays.asList(PRODUCT_DTO));
 
         mockMvc.perform(get(BASE_URL + "/name/" + PRODUCT_DTO.getName())
                         .content(objectMapper.writeValueAsString(PRODUCT_DTO))
@@ -82,14 +83,16 @@ public class ProductControllerTest {
 
     @Test
     public void listProducts_ByUnexistingName_ReturnsNotFound() throws Exception {
+        when(productService.findByName(PRODUCT_DTO.getName()))
+                .thenThrow(ProductNotFoundException.class);
+
         mockMvc.perform(get(BASE_URL +"/name/" + PRODUCT_DTO.getName()))
                 .andExpect(status().isNotFound());
     }
 
     @Test
     public void listProducts_ByPageAndSize_ReturnsPagedProducts() throws Exception {
-        Mockito
-                .when(productService.findProducts(PAGE_PRODUCT_DTO.getNumber(), PAGE_PRODUCT_DTO.getSize()))
+        when(productService.findProducts(PAGE_PRODUCT_DTO.getNumber(), PAGE_PRODUCT_DTO.getSize()))
                 .thenReturn(PAGE_PRODUCT_DTO);
 
         mockMvc.perform(get(BASE_URL + "?" + String.format("page=%s&size=%s", PAGE_PRODUCT_DTO.getNumber(), PAGE_PRODUCT_DTO.getSize())))
@@ -99,6 +102,9 @@ public class ProductControllerTest {
 
     @Test
     public void listProducts_ByUnexistingPage_ReturnsNotFound() throws Exception {
+        when(productService.findProducts(PAGE_PRODUCT_DTO.getNumber(), PAGE_PRODUCT_DTO.getSize()))
+                .thenThrow(ProductNotFoundException.class);
+
         mockMvc.perform(get(BASE_URL + "?" + String.format("page=%s&size=%s", PAGE_PRODUCT_DTO.getNumber(), PAGE_PRODUCT_DTO.getSize())))
                 .andExpect(status().isNotFound());
     }
