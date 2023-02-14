@@ -44,8 +44,14 @@ public class SaleService {
     }
 
     public Page<SaleDTO> findSalesByUser(String email, Integer page, Integer size) {
-        return saleRepository
+        Page<SaleDTO> sales = saleRepository
                 .findSalesByUser(email, PageRequest.of(page, size))
                 .map(saleMapper::toDto);
+
+        if (sales.isEmpty()) {
+            throw new SaleNotFoundException();
+        }
+
+        return sales;
     }
 }

@@ -17,7 +17,6 @@ import org.mockito.Mock;
 
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 
 import java.util.Arrays;
@@ -68,20 +67,26 @@ public class SaleServiceTest {
     }
 
     @Test
-    public void listSales_ReturnsPaginateSales() {
-        Integer page = 0;
-        Integer size = 10;
-        PageRequest pageRequest = PageRequest.of(page, size);
-        String userEmail = "user@email.com";
-
-        when(saleRepository.findSalesByUser(userEmail, pageRequest))
-                .thenReturn(new PageImpl<>(Arrays.asList(SALE)));
+    public void getSales_BySizeAndPage_ReturnsSalesPage() {
+        when(saleRepository
+                .findSalesByUser(USER.getEmail(), PageRequest.of(PAGE_SALE.getNumber(), PAGE_SALE.getSize())))
+                    .thenReturn(PAGE_SALE);
         when(saleMapper.toDto(SALE)).thenReturn(SALE_DTO);
 
-        Page<SaleDTO> sut = saleService.findSalesByUser(userEmail, page, size);
+        Page<SaleDTO> sut = saleService.findSalesByUser(USER.getEmail(), PAGE_SALE.getNumber(), PAGE_SALE.getSize());
 
         assertThat(sut.isEmpty()).isEqualTo(false);
-        assertThat(sut.getNumberOfElements()).isEqualTo(1);
+        assertThat(sut.getNumberOfElements()).isEqualTo(PAGE_SALE.getTotalElements());
         assertThat(sut.get()).isEqualTo(Arrays.asList(SALE_DTO));
+    }
+
+    @Test
+    public void getSales_ByUnexistingSizeAndPage_ThrowsException() {
+        when(saleRepository
+                .findSalesByUser(USER.getEmail(), PageRequest.of(PAGE_SALE.getNumber(), PAGE_SALE.getSize())))
+                .thenReturn(Page.empty());
+
+        assertThatThrownBy(() -> saleService.findSalesByUser(USER.getEmail(), PAGE_SALE.getNumber(), PAGE_SALE.getSize()))
+                .isInstanceOf(SaleNotFoundException.class);
     }
 }

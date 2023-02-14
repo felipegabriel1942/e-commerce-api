@@ -30,7 +30,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
             SaleNotFoundException ex,
             WebRequest request
     ) {
-        return new ResponseEntity<>(ex, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(ex, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(ProductNotFoundException.class)

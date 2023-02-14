@@ -81,13 +81,13 @@ public class SaleControllerTest {
 
     @Test
     @WithMockUser(username = "user@email.com")
-    public void updateSale_WithUnexistingId_ThrowsException() throws Exception {
+    public void updateSale_WithUnexistingId_ReturnsNotFound() throws Exception {
         when(saleService.cancel(1L)).thenThrow(SaleNotFoundException.class);
 
         mockMvc.perform(delete(BASE_URL + "/" + 1)
                         .content(objectMapper.writeValueAsString(SALE_DTO))
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isNotFound());
     }
 
     @Test
@@ -105,7 +105,7 @@ public class SaleControllerTest {
     @WithMockUser(username = "user@email.com")
     public void listSales_ByUnexistingPage_ReturnsNotFound() throws Exception {
         when(saleService.findSalesByUser(USER.getEmail(), PAGE_SALE_DTO.getNumber(), PAGE_SALE_DTO.getSize()))
-                .thenReturn(Page.empty());
+                .thenThrow(SaleNotFoundException.class);
 
         mockMvc.perform(get(BASE_URL + String.format("?page=%s&size=%s", PAGE_SALE_DTO.getNumber(), PAGE_SALE_DTO.getSize())))
                 .andExpect(status().isNotFound());

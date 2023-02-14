@@ -44,6 +44,6 @@ public class SaleController {
             @AuthenticationPrincipal User user
     ) {
         Page<SaleDTO> sales =  saleService.findSalesByUser(user.getEmail(), page, size);
-        return new ResponseEntity<>(sales, sales.isEmpty() ? HttpStatus.NOT_FOUND : HttpStatus.OK);
+        return new ResponseEntity<>(sales, HttpStatus.OK);
     }
 }

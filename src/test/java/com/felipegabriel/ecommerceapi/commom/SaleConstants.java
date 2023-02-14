@@ -30,7 +30,13 @@ public class SaleConstants {
 
     public static final Page<SaleDTO> PAGE_SALE_DTO = new PageImpl<>(
             Arrays.asList(SALE_DTO),
-            PageRequest.of(0, 10),
+            PageRequest.of(0, 1),
+            1
+    );
+
+    public static final Page<Sale> PAGE_SALE = new PageImpl<>(
+            Arrays.asList(SALE),
+            PageRequest.of(0, 1),
             1
     );
 }
