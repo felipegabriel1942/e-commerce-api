@@ -10,8 +10,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @DataJpaTest
@@ -55,5 +59,18 @@ public class ProductRepositoryTest {
         assertThat(sut.isEmpty()).isFalse();
         assertThat(sut.size()).isEqualTo(1);
         assertThat(sut.get(0)).isEqualTo(savedProduct);
+    }
+
+
+    @Test
+    public void findAllProducts_ByStatus_ReturnsActiveProductsList() {
+        List<Product> products = Arrays.asList(PRODUCT, INACTIVE_PRODUCT);
+
+        products.forEach(product -> testEntityManager.persist(product));
+
+        Page<Product> sut = productRepository.findAll(PageRequest.of(0, 10));
+
+        assertThat(sut.isEmpty()).isFalse();
+        assertThat(sut.getNumberOfElements()).isEqualTo(1);
     }
 }
