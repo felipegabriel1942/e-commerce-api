@@ -40,7 +40,7 @@ public class ProductRepositoryTest {
     @Test
     public void createProduct_WithInvalidData_ThrowsException() {
         Product emptyProduct = new Product();
-        Product invalidProduct = new Product(null, "", BigDecimal.ZERO);
+        Product invalidProduct = new Product(null, "", BigDecimal.ZERO, null, null);
 
         assertThatThrownBy(() ->  productRepository.save(emptyProduct)).isInstanceOf(RuntimeException.class);
         assertThatThrownBy(() ->  productRepository.save(invalidProduct)).isInstanceOf(RuntimeException.class);

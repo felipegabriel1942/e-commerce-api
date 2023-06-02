@@ -6,13 +6,14 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import com.felipegabriel.ecommerceapi.exception.ProductNotFoundException;
-import com.felipegabriel.ecommerceapi.exception.SaleNotFoundException;
 import com.felipegabriel.ecommerceapi.model.entity.Product;
 import com.felipegabriel.ecommerceapi.security.JwtAuthenticationFilter;
 import com.felipegabriel.ecommerceapi.service.ProductService;
+
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -57,7 +58,7 @@ public class ProductControllerTest {
     @WithMockUser(username = "admin", password = "admin", roles = {"ADMIN"})
     public void createProduct_WithInvalidData_ReturnsProduct() throws Exception {
         Product emptyProduct = new Product();
-        Product invalidProduct = new Product(null, "", null);
+        Product invalidProduct = new Product(null, "", null, null, null);
 
         mockMvc.perform(post(BASE_URL)
                         .content(objectMapper.writeValueAsString(emptyProduct))

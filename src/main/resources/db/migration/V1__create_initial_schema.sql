@@ -11,7 +11,8 @@ VALUES ('admin@email.com', '$2a$10$6W9lFh22y.yDfVIh8ZASa.iyqZNbJpuP1VM3ofQWHUFcy
 CREATE TABLE product (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255),
-    price NUMERIC(38,2)
+    price NUMERIC(38,2),
+    status VARCHAR(255)
 );
 
 CREATE TABLE sale (

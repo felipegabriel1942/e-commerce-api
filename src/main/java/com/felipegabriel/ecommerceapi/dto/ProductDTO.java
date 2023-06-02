@@ -1,5 +1,6 @@
 package com.felipegabriel.ecommerceapi.dto;
 
+import com.felipegabriel.ecommerceapi.enums.ProductStatus;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -23,4 +24,10 @@ public class ProductDTO {
 
     @NotNull
     private BigDecimal price;
+
+    private ProductStatus status;
+
+    @NotNull
+    @NotEmpty
+    private String imageUrl;
 }
