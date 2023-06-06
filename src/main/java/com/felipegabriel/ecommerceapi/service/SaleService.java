@@ -4,11 +4,14 @@ import com.felipegabriel.ecommerceapi.dto.SaleDTO;
 import com.felipegabriel.ecommerceapi.enums.SaleStatus;
 import com.felipegabriel.ecommerceapi.exception.SaleNotFoundException;
 import com.felipegabriel.ecommerceapi.mapper.SaleMapper;
+import com.felipegabriel.ecommerceapi.model.entity.Product;
 import com.felipegabriel.ecommerceapi.model.entity.Sale;
 import com.felipegabriel.ecommerceapi.model.entity.User;
+import com.felipegabriel.ecommerceapi.model.repository.ProductRepository;
 import com.felipegabriel.ecommerceapi.model.repository.SaleRepository;
-import com.felipegabriel.ecommerceapi.model.repository.UserRepository;
+
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -23,10 +26,15 @@ public class SaleService {
 
     private final SaleMapper saleMapper;
 
+    private final ProductRepository productRepository;
+
     public SaleDTO create(SaleDTO saleDTO, User user) {
         Sale sale = saleMapper.toEntity(saleDTO);
         sale.setUser(user);
-
+        saleDTO.getProducts().forEach(productDTO -> {
+            Product product = productRepository.findById(productDTO.getId()).get();
+            sale.addProduct(product);
+        });
         return saleMapper.toDto(saleRepository.save(sale));
     }
 

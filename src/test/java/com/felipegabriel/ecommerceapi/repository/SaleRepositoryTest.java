@@ -29,10 +29,14 @@ public class SaleRepositoryTest {
     @BeforeEach
     public void beforeEach() {
         SALE.setId(null);
+        SALE.setSaleProducts(null);
+        SALE.getUser().setId(null);
     }
 
     @Test
     public void createSale_WithValidData_ReturnsSale() {
+        testEntityManager.persistFlushFind(UserConstants.USER);
+
         Sale savedSale = saleRepository.save(SALE);
 
         Sale sut = testEntityManager.find(Sale.class, savedSale.getId());

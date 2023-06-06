@@ -22,7 +22,11 @@ CREATE TABLE sale (
     _user bigint
 );
 
-CREATE TABLE sale_products (
+CREATE TABLE sale_product (
+    id SERIAL PRIMARY KEY,
     sale_id bigint NOT NULL,
-    products_id bigint NOT NULL
+    product_id bigint NOT NULL,
+    product_price NUMERIC(38,2),
+    CONSTRAINT fk_sale FOREIGN KEY (sale_id) REFERENCES sale (id),
+    CONSTRAINT fk_product FOREIGN KEY (product_id) REFERENCES product (id)
 );

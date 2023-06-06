@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import com.felipegabriel.ecommerceapi.dto.SaleDTO;
 import com.felipegabriel.ecommerceapi.exception.SaleNotFoundException;
 import com.felipegabriel.ecommerceapi.model.entity.Sale;
 import com.felipegabriel.ecommerceapi.security.JwtAuthenticationFilter;
@@ -67,7 +68,7 @@ public class SaleControllerTest {
     @Test
     @WithMockUser(username = "user@email.com")
     public void createSale_WithInvalidData_ThrowsException() throws Exception {
-        mockMvc.perform(post(BASE_URL).content(objectMapper.writeValueAsString(new Sale()))
+        mockMvc.perform(post(BASE_URL).content(objectMapper.writeValueAsString(new SaleDTO()))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isUnprocessableEntity());
     }

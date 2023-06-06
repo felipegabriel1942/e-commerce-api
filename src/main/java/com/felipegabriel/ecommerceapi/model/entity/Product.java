@@ -1,5 +1,7 @@
 package com.felipegabriel.ecommerceapi.model.entity;
 
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.felipegabriel.ecommerceapi.enums.ProductStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
@@ -12,6 +14,8 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Where;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -41,6 +45,10 @@ public class Product {
     @NotEmpty
     @NotNull
     private String imageUrl;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    private List<SaleProduct> saleProducts = new ArrayList<>();
 
     @PrePersist
     void prePersist() {

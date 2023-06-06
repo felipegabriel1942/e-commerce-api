@@ -14,7 +14,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -30,6 +29,7 @@ public class ProductRepositoryTest {
     @BeforeEach
     public void beforeEach() {
         PRODUCT.setId(null);
+        PRODUCT.setSaleProducts(null);
     }
 
     @Test
@@ -44,7 +44,7 @@ public class ProductRepositoryTest {
     @Test
     public void createProduct_WithInvalidData_ThrowsException() {
         Product emptyProduct = new Product();
-        Product invalidProduct = new Product(null, "", BigDecimal.ZERO, null, null);
+        Product invalidProduct = new Product(null, "", BigDecimal.ZERO, null, null, null);
 
         assertThatThrownBy(() ->  productRepository.save(emptyProduct)).isInstanceOf(RuntimeException.class);
         assertThatThrownBy(() ->  productRepository.save(invalidProduct)).isInstanceOf(RuntimeException.class);

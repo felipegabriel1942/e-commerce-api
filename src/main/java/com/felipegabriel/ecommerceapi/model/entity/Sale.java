@@ -10,7 +10,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @AllArgsConstructor
@@ -32,9 +34,8 @@ public class Sale {
     @NotNull
     private User user;
 
-    @ManyToMany(targetEntity = Product.class)
-    @NotNull(message = "Venda deve ter pelo menos um produto.")
-    private List<Product> products;
+    @OneToMany(mappedBy = "sale", cascade = CascadeType.ALL)
+    private List<SaleProduct> saleProducts = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
     private SaleStatus status = SaleStatus.ACTIVE;
@@ -48,5 +49,31 @@ public class Sale {
         if (this.date == null) {
             this.date = LocalDate.now();
         }
+    }
+
+    public void addProduct(Product product) {
+        SaleProduct saleProduct = new SaleProduct(this, product);
+
+        if (saleProducts == null) {
+            this.saleProducts = new ArrayList<>();
+        }
+
+        saleProducts.add(saleProduct);
+
+        if (product.getSaleProducts() == null) {
+            product.setSaleProducts(new ArrayList<>());
+        }
+
+        product.getSaleProducts().add(saleProduct);
+    }
+
+    public List<Product> getProducts() {
+        return this.saleProducts.stream()
+                .map(saleProduct -> {
+                    Product product = saleProduct.getProduct();
+                    product.setPrice(saleProduct.getProductPrice());
+                    return product;
+                })
+                .collect(Collectors.toList());
     }
 }

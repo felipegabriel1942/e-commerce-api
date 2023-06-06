@@ -58,7 +58,7 @@ public class ProductControllerTest {
     @WithMockUser(username = "admin", password = "admin", roles = {"ADMIN"})
     public void createProduct_WithInvalidData_ReturnsProduct() throws Exception {
         Product emptyProduct = new Product();
-        Product invalidProduct = new Product(null, "", null, null, null);
+        Product invalidProduct = new Product(null, "", null, null, null, null);
 
         mockMvc.perform(post(BASE_URL)
                         .content(objectMapper.writeValueAsString(emptyProduct))
