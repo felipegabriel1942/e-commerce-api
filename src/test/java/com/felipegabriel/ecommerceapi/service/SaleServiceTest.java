@@ -38,15 +38,14 @@ public class SaleServiceTest {
     private SaleMapper saleMapper;
 
     @Mock
-    private ProductRepository productRepository;
-
+    private ProductService productService;
 
     @Test
     public void createSale_WithValidData_ReturnsSale() {
         when(saleRepository.save(any())).thenReturn(SALE);
         when(saleMapper.toDto(SALE)).thenReturn(SALE_DTO);
         when(saleMapper.toEntity(SALE_DTO)).thenReturn(SALE);
-        when(productRepository.findById(any())).thenReturn(Optional.of(PRODUCT));
+        when(productService.findById(any())).thenReturn(PRODUCT);
 
         SaleDTO sut = saleService.create(SALE_DTO, USER);
 

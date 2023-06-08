@@ -56,6 +56,18 @@ public class ProductControllerTest {
 
     @Test
     @WithMockUser(username = "admin", password = "admin", roles = {"ADMIN"})
+    public void updateProduct_WithValidData_ReturnsProduct() throws Exception {
+        when(productService.update(PRODUCT_DTO)).thenReturn(PRODUCT);
+
+        mockMvc.perform(put(BASE_URL)
+                        .content(objectMapper.writeValueAsString(PRODUCT_DTO))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().json(objectMapper.writeValueAsString(PRODUCT)))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockUser(username = "admin", password = "admin", roles = {"ADMIN"})
     public void createProduct_WithInvalidData_ReturnsProduct() throws Exception {
         Product emptyProduct = new Product();
         Product invalidProduct = new Product(null, "", null, null, null, null);

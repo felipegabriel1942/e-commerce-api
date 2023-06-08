@@ -32,6 +32,13 @@ public class ProductController {
         return new ResponseEntity<>(product, HttpStatus.CREATED);
     }
 
+    @PutMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Product> update(@RequestBody @Valid ProductDTO productDTO) {
+        Product product = productService.update(productDTO);
+        return new ResponseEntity<>(product, HttpStatus.OK);
+    }
+
     @GetMapping("name/{name}")
     public ResponseEntity<List<ProductDTO>> findByName(@PathVariable("name") String name) {
         List<ProductDTO> product = productService.findByName(name);

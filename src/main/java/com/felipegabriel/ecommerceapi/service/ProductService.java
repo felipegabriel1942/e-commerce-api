@@ -25,6 +25,11 @@ public class ProductService {
         return productRepository.save(productMapper.toEntity(productDTO));
     }
 
+    public Product update(ProductDTO productDTO) {
+        this.findById(productDTO.getId());
+        return productRepository.save(productMapper.toEntity(productDTO));
+    }
+
     public List<ProductDTO> findByName(String name) {
         List<ProductDTO> products = productRepository.findByName(name).stream()
                 .map(productMapper::toDto)
@@ -47,5 +52,9 @@ public class ProductService {
         }
 
         return products;
+    }
+
+    protected Product findById(Long id) {
+        return productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException());
     }
 }

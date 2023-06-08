@@ -26,13 +26,13 @@ public class SaleService {
 
     private final SaleMapper saleMapper;
 
-    private final ProductRepository productRepository;
+    private final ProductService productService;
 
     public SaleDTO create(SaleDTO saleDTO, User user) {
         Sale sale = saleMapper.toEntity(saleDTO);
         sale.setUser(user);
         saleDTO.getProducts().forEach(productDTO -> {
-            Product product = productRepository.findById(productDTO.getId()).get();
+            Product product = productService.findById(productDTO.getId());
             sale.addProduct(product);
         });
         return saleMapper.toDto(saleRepository.save(sale));

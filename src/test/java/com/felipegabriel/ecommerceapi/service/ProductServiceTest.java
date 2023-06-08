@@ -20,6 +20,7 @@ import org.springframework.data.domain.PageRequest;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @ExtendWith(MockitoExtension.class)
@@ -57,7 +58,7 @@ public class ProductServiceTest {
     }
 
     @Test
-    public void getProducts_ByUnexistingName_ThrowsException() {
+    public void getProducts_ByNonExistingName_ThrowsException() {
         when(productRepository.findByName(anyString())).thenReturn(Arrays.asList());
 
         assertThatThrownBy(() -> productService.findByName(anyString())).isInstanceOf(ProductNotFoundException.class);
@@ -77,11 +78,45 @@ public class ProductServiceTest {
     }
 
     @Test
-    public void getProducts_ByUnexistingSizeAndPage_ThrowsException() {
+    public void getProducts_ByNonExistingSizeAndPage_ThrowsException() {
         when(productRepository.findAll(PageRequest.of(PAGE_PRODUCT_DTO.getNumber(), PAGE_PRODUCT_DTO.getSize())))
                 .thenReturn(Page.empty());
 
         assertThatThrownBy(() -> productService.findProducts(PAGE_PRODUCT_DTO.getNumber(), PAGE_PRODUCT_DTO.getSize()))
                 .isInstanceOf(ProductNotFoundException.class);
+    }
+
+    @Test
+    public void updateProduct_WithValidData_ReturnsProduct() {
+        when(productRepository.save(PRODUCT)).thenReturn(PRODUCT);
+        when(productMapper.toEntity(PRODUCT_DTO)).thenReturn(PRODUCT);
+        when(productRepository.findById(any())).thenReturn(Optional.of(PRODUCT));
+
+        Product sut = productService.update(PRODUCT_DTO);
+
+        assertThat(sut).isEqualTo(PRODUCT);
+    }
+
+    @Test
+    public void updateProduct_WithNonExistentId_ThrowsException() {
+        when(productRepository.findById(any())).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> productService.update(PRODUCT_DTO)).isInstanceOf(ProductNotFoundException.class);
+    }
+
+    @Test
+    public void findProduct_WithExistentId_ReturnsProduct() {
+        when(productRepository.findById(any())).thenReturn(Optional.of(PRODUCT));
+
+        Product sut = productService.findById(any());
+
+        assertThat(sut).isEqualTo(PRODUCT);
+    }
+
+    @Test
+    public void findProduct_WithNonExistentId_ThrowsException() {
+        when(productRepository.findById(any())).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> productService.findById(any())).isInstanceOf(ProductNotFoundException.class);
     }
 }
